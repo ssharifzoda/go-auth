@@ -21,8 +21,8 @@ type JWTClaims struct {
 // Сервис-потребитель должен реализовать эти интерфейсы для своих структур.
 // ----------------------------------------------------------------------
 
-// Userer - минимальный интерфейс для работы с Пользователем.
-type Userer interface {
+// UserIn - минимальный интерфейс для работы с Пользователем.
+type UserIn interface {
 	GetID() int64
 	GetEmail() string
 	GetPasswordHash() string // Должен возвращать хэш пароля
@@ -33,11 +33,10 @@ type Userer interface {
 // ----------------------------------------------------------------------
 
 // Storage определяет методы для работы с Пользователями в БД.
-// Так как мы используем JWT, методы сессий здесь не нужны.
+// При необходимости разработчик расширяет свою реализацию Storage
+// дополнительными методами (CreateUser, UpdateUser и т.д.)
 type Storage interface {
 	// User
-	GetUserByEmail(ctx context.Context, email string) (Userer, error)
-	GetUserByID(ctx context.Context, id int64) (Userer, error)
-	// При необходимости разработчик расширяет свою реализацию Storage
-	// дополнительными методами (CreateUser, UpdateUser и т.д.)
+	GetUserByEmail(ctx context.Context, email string) (UserIn, error)
+	GetUserByID(ctx context.Context, id int64) (UserIn, error)
 }
