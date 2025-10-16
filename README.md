@@ -26,7 +26,7 @@ go get github.com/golang-jwt/jwt/v5
 
 ### Шаг 1. Реализация Интерфейсов Моделей
 
-Создайте ваши структуры пользователя (`User`) в вашем проекте, которые должны реализовать интерфейс **`auth.Userer`** из нашего пакета.
+Создайте ваши структуры пользователя (`User`) в вашем проекте, которые должны реализовать интерфейс **`auth.UserIn`** из нашего пакета.
 
 ```go
 // my-service/models/user.go
@@ -48,7 +48,7 @@ func (u *ServiceUser) GetEmail() string      { return u.Email }
 func (u *ServiceUser) GetPasswordHash() string { return u.Password }
 
 // Убедитесь, что импорт 'go-auth-pkg/auth' правильный.
-var _ auth.Userer = (*ServiceUser)(nil) // Проверка интерфейса во время компиляции
+var _ auth.UserIn = (*ServiceUser)(nil) // Проверка интерфейса во время компиляции
 ```
 
 -----
@@ -57,7 +57,7 @@ var _ auth.Userer = (*ServiceUser)(nil) // Проверка интерфейса
 
 Создайте структуру, которая будет взаимодействовать с вашей базой данных (PostgreSQL) и реализовывать интерфейс **`auth.Storage`**.
 
-**Важно:** Методы `Storage` должны возвращать ваши модели, **приведенные к интерфейсу** `auth.Userer`.
+**Важно:** Методы `Storage` должны возвращать ваши модели, **приведенные к интерфейсу** `auth.UserIn`.
 
 ```go
 // my-service/storage/pg_storage.go
@@ -77,7 +77,7 @@ type PgStorage struct {
 }
 
 // GetUserByEmail реализует auth.Storage
-func (s *PgStorage) GetUserByEmail(ctx context.Context, email string) (auth.Userer, error) {
+func (s *PgStorage) GetUserByEmail(ctx context.Context, email string) (auth.UserIn, error) {
 	var u models.ServiceUser
 	// Здесь код для запроса к Postgres и сканирования в u
 	// Пример (упрощенно):
@@ -93,7 +93,7 @@ func (s *PgStorage) GetUserByEmail(ctx context.Context, email string) (auth.User
 }
 
 // GetUserByID реализует auth.Storage
-func (s *PgStorage) GetUserByID(ctx context.Context, id int64) (auth.Userer, error) {
+func (s *PgStorage) GetUserByID(ctx context.Context, id int64) (auth.UserIn, error) {
     // Аналогичная логика, но поиск по ID
 	return nil, errors.New("not implemented")
 }
