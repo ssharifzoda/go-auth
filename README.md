@@ -9,8 +9,8 @@
 Для добавления пакета в ваш Go-проект используйте команду:
 
 ```bash
-go get your-repository-path/go-auth-pkg
-# Например: go get github.com/user/go-auth-pkg
+go get github.com/ssharifzoda/go-auth
+
 ```
 
 Также убедитесь, что в вашем проекте установлены необходимые зависимости:
